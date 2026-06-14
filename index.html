@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>worKING — We Work For Our Bags</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&family=Space+Mono:wght@400;700&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #000000;
+    --offwhite: #EFEFEF;
+    --gold: #FFD700;
+    --gold-dim: #B8980A;
+    --charcoal: #111111;
+    --mid: #444444;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--offwhite);
+    font-family: 'Space Grotesk', sans-serif;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.35;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.4rem 3rem;
+    border-bottom: 1px solid #1a1a1a;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(12px);
+  }
+
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--offwhite);
+  }
+  .nav-logo span { color: var(--gold); }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--mid);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 8rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Radial glow behind hero */
+  .hero::after {
+    content: '';
+    position: absolute;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(255,215,0,0.07) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    animation: pulse-glow 4s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.12); }
+  }
+
+  /* Crown SVG */
+  .crown-wrap {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 2rem;
+  }
+
+  .crown-svg {
+    width: 100px;
+    height: auto;
+    animation: float-crown 3.5s ease-in-out infinite;
+    filter: drop-shadow(0 0 24px rgba(255,215,0,0.5));
+  }
+
+  @keyframes float-crown {
+    0%, 100% { transform: translateY(0px) rotate(-3deg); }
+    50% { transform: translateY(-14px) rotate(3deg); }
+  }
+
+  .hero-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 1.2rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: clamp(5rem, 16vw, 14rem);
+    line-height: 0.88;
+    letter-spacing: -0.04em;
+    position: relative;
+    z-index: 2;
+    user-select: none;
+  }
+
+  .hero-title .wor {
+    color: var(--offwhite);
+    display: block;
+  }
+
+  .hero-title .king {
+    color: var(--gold);
+    display: block;
+    text-shadow: 0 0 80px rgba(255,215,0,0.3);
+  }
+
+  .hero-tagline {
+    margin-top: 2.5rem;
+    font-size: clamp(0.9rem, 2vw, 1.15rem);
+    color: var(--mid);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 300;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-tagline strong {
+    color: var(--offwhite);
+    font-weight: 700;
+  }
+
+  .hero-cta-row {
+    margin-top: 3.5rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 0.85rem 2.2rem;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+
+  .btn-gold {
+    background: var(--gold);
+    color: var(--black);
+    font-weight: 700;
+  }
+  .btn-gold:hover {
+    background: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(255,215,0,0.25);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--offwhite);
+    border: 1px solid #333;
+  }
+  .btn-outline:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    transform: translateY(-2px);
+  }
+
+  /* ── TICKER TAPE ── */
+  .ticker {
+    width: 100%;
+    overflow: hidden;
+    background: var(--gold);
+    padding: 0.65rem 0;
+    display: flex;
+    gap: 0;
+  }
+
+  .ticker-track {
+    display: flex;
+    gap: 0;
+    animation: ticker-scroll 18s linear infinite;
+    white-space: nowrap;
+  }
+
+  .ticker-item {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--black);
+    padding: 0 2.5rem;
+  }
+
+  .ticker-dot {
+    color: rgba(0,0,0,0.35);
+  }
+
+  @keyframes ticker-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ── CA SECTION ── */
+  .ca-section {
+    padding: 6rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-top: 1px solid #111;
+    border-bottom: 1px solid #111;
+    background: var(--charcoal);
+  }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 1.5rem;
+  }
+
+  .ca-box {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: #000;
+    border: 1px solid #222;
+    padding: 1.2rem 2rem;
+    max-width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .ca-address {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(0.65rem, 2.2vw, 0.95rem);
+    color: var(--offwhite);
+    letter-spacing: 0.04em;
+    word-break: break-all;
+  }
+
+  .copy-btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: var(--gold);
+    color: var(--black);
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-weight: 700;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .copy-btn:hover { background: #fff; }
+  .copy-btn.copied { background: #3CFF6A; }
+
+  /* ── MANIFESTO ── */
+  .manifesto {
+    padding: 8rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .manifesto-big {
+    font-size: clamp(2rem, 6vw, 5rem);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    color: var(--offwhite);
+    margin-bottom: 2rem;
+  }
+
+  .manifesto-big em {
+    font-style: normal;
+    color: var(--gold);
+  }
+
+  .manifesto-sub {
+    font-size: 1rem;
+    color: var(--mid);
+    line-height: 1.8;
+    max-width: 560px;
+    margin: 0 auto;
+    font-weight: 300;
+  }
+
+  /* ── STATS ── */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid #111;
+    border-bottom: 1px solid #111;
+  }
+
+  .stat-cell {
+    padding: 4rem 2rem;
+    text-align: center;
+    border-right: 1px solid #111;
+  }
+  .stat-cell:last-child { border-right: none; }
+
+  .stat-num {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-lbl {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--mid);
+  }
+
+  /* ── HOW IT WORKS ── */
+  .howto {
+    padding: 8rem 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .howto-title {
+    font-size: clamp(1.5rem, 4vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 3.5rem;
+    color: var(--offwhite);
+  }
+  .howto-title span { color: var(--gold); }
+
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 3rem 1fr;
+    gap: 1.5rem;
+    align-items: start;
+    padding: 2rem 0;
+    border-bottom: 1px solid #111;
+  }
+  .step:first-child { border-top: 1px solid #111; }
+
+  .step-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--gold-dim);
+    letter-spacing: 0.1em;
+    margin-top: 0.15rem;
+  }
+
+  .step-body h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--offwhite);
+    margin-bottom: 0.4rem;
+    letter-spacing: -0.01em;
+  }
+
+  .step-body p {
+    font-size: 0.85rem;
+    color: var(--mid);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid #111;
+    padding: 3rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .footer-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--offwhite);
+  }
+  .footer-logo span { color: var(--gold); }
+
+  .footer-right {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--mid);
+    text-transform: uppercase;
+  }
+
+  .footer-disclaimer {
+    width: 100%;
+    font-size: 0.65rem;
+    color: #333;
+    text-align: center;
+    font-family: 'Space Mono', monospace;
+    line-height: 1.6;
+    padding-top: 1.5rem;
+    border-top: 1px solid #111;
+  }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 640px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .nav-links { gap: 1.2rem; }
+    .stats { grid-template-columns: 1fr; }
+    .stat-cell { border-right: none; border-bottom: 1px solid #111; }
+    footer { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">wor<span>KING</span></div>
+  <ul class="nav-links">
+    <li><a href="#ca">Contract</a></li>
+    <li><a href="#manifesto">Manifesto</a></li>
+    <li><a href="#how">How To</a></li>
+    <li><a href="https://pump.fun" target="_blank">Buy Now</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="crown-wrap">
+    <svg class="crown-svg" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10 70 L20 30 L40 55 L60 10 L80 55 L100 30 L110 70 Z" fill="#FFD700" stroke="#B8980A" stroke-width="2" stroke-linejoin="round"/>
+      <circle cx="10" cy="70" r="5" fill="#FFD700" stroke="#B8980A" stroke-width="1.5"/>
+      <circle cx="60" cy="10" r="5" fill="#FFD700" stroke="#B8980A" stroke-width="1.5"/>
+      <circle cx="110" cy="70" r="5" fill="#FFD700" stroke="#B8980A" stroke-width="1.5"/>
+      <rect x="10" y="70" width="100" height="10" rx="1" fill="#FFD700" stroke="#B8980A" stroke-width="1.5"/>
+    </svg>
+  </div>
+
+  <p class="hero-eyebrow">pump.fun · solana · 2025</p>
+
+  <h1 class="hero-title">
+    <span class="wor">wor</span>
+    <span class="king">KING</span>
+  </h1>
+
+  <p class="hero-tagline">
+    We <strong>work</strong> for our bags.<br>No handouts. No excuses. Only <strong>grind</strong>.
+  </p>
+
+  <div class="hero-cta-row">
+    <a href="https://pump.fun" target="_blank" class="btn btn-gold">Buy on pump.fun</a>
+    <a href="#ca" class="btn btn-outline">Copy CA</a>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track" id="ticker-track">
+    <span class="ticker-item">worKING <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Work For Your Bags <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Grind Never Stops <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Kings Don't Rest <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">worKING <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Pump.Fun <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Solana <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">We Work Hard <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">worKING <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Work For Your Bags <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Grind Never Stops <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Kings Don't Rest <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">worKING <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Pump.Fun <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Solana <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">We Work Hard <span class="ticker-dot">✦</span></span>
+  </div>
+</div>
+
+<!-- CA -->
+<section class="ca-section" id="ca">
+  <p class="section-label">Contract Address</p>
+  <div class="ca-box">
+    <span class="ca-address" id="ca-text">PASTE_YOUR_CA_HERE</span>
+    <button class="copy-btn" id="copy-btn" onclick="copyCA()">Copy</button>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section class="manifesto reveal" id="manifesto">
+  <p class="section-label">The Creed</p>
+  <h2 class="manifesto-big">
+    We don't wait<br>for the moon.<br>We <em>work</em> to get there.
+  </h2>
+  <p class="manifesto-sub">
+    Every bag ever built was earned. worKING isn't just a coin — it's a statement.
+    No VCs. No insiders. No free lunch. Just degens who show up every day and
+    grind their way to the top. The crown doesn't fall from the sky. You take it.
+  </p>
+</section>
+
+<!-- STATS -->
+<div class="stats reveal">
+  <div class="stat-cell">
+    <span class="stat-num">0%</span>
+    <span class="stat-lbl">Dev Tax</span>
+  </div>
+  <div class="stat-cell">
+    <span class="stat-num">100%</span>
+    <span class="stat-lbl">Community</span>
+  </div>
+  <div class="stat-cell">
+    <span class="stat-num">∞</span>
+    <span class="stat-lbl">Grind</span>
+  </div>
+</div>
+
+<!-- HOW TO BUY -->
+<section class="howto reveal" id="how">
+  <h2 class="howto-title">How to <span>cop.</span></h2>
+  <div class="steps">
+    <div class="step">
+      <span class="step-num">01</span>
+      <div class="step-body">
+        <h3>Get a Solana Wallet</h3>
+        <p>Phantom or Backpack — download, set up, and fund it with SOL from any exchange.</p>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">02</span>
+      <div class="step-body">
+        <h3>Go to pump.fun</h3>
+        <p>Head over to pump.fun and paste the contract address above into the search bar.</p>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">03</span>
+      <div class="step-body">
+        <h3>Swap SOL for worKING</h3>
+        <p>Set your slippage (10–20% recommended), hit buy, and stack your bag.</p>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">04</span>
+      <div class="step-body">
+        <h3>Hold Like a King</h3>
+        <p>Diamond hands. You didn't grind for this to paper-hand at the first pump. Act accordingly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">wor<span>KING</span></div>
+  <div class="footer-right">We Work For Our Bags · Solana · 2025</div>
+  <p class="footer-disclaimer">
+    worKING is a memecoin on Solana with no intrinsic value or financial return expectation.<br>
+    This is not financial advice. Trade at your own risk. DYOR. 👑
+  </p>
+</footer>
+
+<script>
+  // ── COPY CA ──
+  function copyCA() {
+    const addr = document.getElementById('ca-text').textContent;
+    const btn = document.getElementById('copy-btn');
+    navigator.clipboard.writeText(addr).then(() => {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  }
+
+  // ── SCROLL REVEAL ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
+
